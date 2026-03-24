@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Grade Calculator - UMTC</title>
+
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #f4f4f4;
+    display: flex;
+    justify-content: center;
+    padding: 30px;
+  }
+
+  .container {
+    background: #fff;
+    padding: 25px;
+    border-radius: 12px;
+    width: 400px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  }
+
+  h2 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .section {
+    margin-bottom: 15px;
+  }
+
+  .section label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+  }
+
+  input {
+    width: 48%;
+    padding: 8px;
+    margin: 5px 1%;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+  }
+
+  button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    background: black;
+    color: white;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+
+  button:hover {
+    background: #333;
+  }
+
+  .result {
+    margin-top: 15px;
+    font-size: 18px;
+    text-align: center;
+    font-weight: bold;
+  }
+</style>
+</head>
+
+<body>
+
+<div class="container">
+  <h2>UMTC Grade Calculator</h2>
+
+  <!-- Exams -->
+  <div class="section">
+    <label>1st Exam (10%)</label>
+    <input type="number" id="e1_score" placeholder="Score">
+    <input type="number" id="e1_total" placeholder="Total">
+  </div>
+
+  <div class="section">
+    <label>2nd Exam (10%)</label>
+    <input type="number" id="e2_score" placeholder="Score">
+    <input type="number" id="e2_total" placeholder="Total">
+  </div>
+
+  <div class="section">
+    <label>3rd Exam (10%)</label>
+    <input type="number" id="e3_score" placeholder="Score">
+    <input type="number" id="e3_total" placeholder="Total">
+  </div>
+
+  <div class="section">
+    <label>Final Exam (40%)</label>
+    <input type="number" id="final_score" placeholder="Score">
+    <input type="number" id="final_total" placeholder="Total">
+  </div>
+
+  <!-- Quiz -->
+  <div class="section">
+    <label>Quizzes (10%)</label>
+    <input type="number" id="quiz_score" placeholder="Score">
+    <input type="number" id="quiz_total" placeholder="Total">
+  </div>
+
+  <!-- Research -->
+  <div class="section">
+    <label>Research (20%)</label>
+    <input type="number" id="res_score" placeholder="Score">
+    <input type="number" id="res_total" placeholder="Total">
+  </div>
+
+  <button onclick="calculate()">Calculate Final Grade</button>
+
+  <div class="result" id="result"></div>
+</div>
+
+<script>
+function compute(score, total, percentage) {
+  if (!score || !total || total === 0) return 0;
+  return ((score / total) * 85 + 15) * percentage;
+}
+
+function calculate() {
+  let totalGrade =
+    compute(e1_score.value, e1_total.value, 0.10) +
+    compute(e2_score.value, e2_total.value, 0.10) +
+    compute(e3_score.value, e3_total.value, 0.10) +
+    compute(final_score.value, final_total.value, 0.40) +
+    compute(quiz_score.value, quiz_total.value, 0.10) +
+    compute(res_score.value, res_total.value, 0.20);
+
+  document.getElementById("result").innerText =
+    "Final Grade: " + totalGrade.toFixed(2);
+}
+</script>
+
+</body>
+</html>
