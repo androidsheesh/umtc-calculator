@@ -2,68 +2,203 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Grade Calculator - UMTC</title>
 
 <style>
+  /* Base & Light Mode Variables */
+  :root {
+    --bg-color: #f4f7f6;
+    --card-bg: #ffffff;
+    --text-main: #2c3e50;
+    --text-muted: #7f8c8d;
+    --border-color: #e0e6ed;
+    --input-bg: #ffffff;
+    --primary-btn: #2c3e50;
+    --primary-btn-hover: #1a252f;
+    --btn-text: #ffffff;
+    --shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    --transition: 0.3s ease;
+  }
+
+  /* Dark Mode Variables */
+  [data-theme="dark"] {
+    --bg-color: #121212;
+    --card-bg: #1e1e1e;
+    --text-main: #f5f6fa;
+    --text-muted: #a4b0be;
+    --border-color: #333333;
+    --input-bg: #2d2d2d;
+    --primary-btn: #4dabf7;
+    --primary-btn-hover: #3b8fd9;
+    --btn-text: #121212;
+    --shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
   body {
-    font-family: Arial, sans-serif;
-    background: #f4f4f4;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-main);
     display: flex;
     justify-content: center;
-    padding: 30px;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+    transition: background-color var(--transition), color var(--transition);
   }
 
   .container {
-    background: #fff;
-    padding: 25px;
-    border-radius: 12px;
-    width: 400px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    background: var(--card-bg);
+    padding: 35px 30px;
+    border-radius: 16px;
+    width: 100%;
+    max-width: 450px;
+    box-shadow: var(--shadow);
+    transition: background-color var(--transition), box-shadow var(--transition);
+  }
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
   }
 
   h2 {
-    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 600;
+    letter-spacing: -0.5px;
+  }
+
+  /* Theme Toggle Switch */
+  .theme-switch {
+    display: inline-block;
+    height: 24px;
+    position: relative;
+    width: 44px;
+  }
+
+  .theme-switch input {
+    display: none;
+  }
+
+  .slider {
+    background-color: #ccc;
+    bottom: 0;
+    cursor: pointer;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transition: .4s;
+    border-radius: 24px;
+  }
+
+  .slider:before {
+    background-color: #fff;
+    bottom: 3px;
+    content: "";
+    height: 18px;
+    left: 3px;
+    position: absolute;
+    transition: .4s;
+    width: 18px;
+    border-radius: 50%;
+  }
+
+  input:checked + .slider {
+    background-color: var(--primary-btn);
+  }
+
+  input:checked + .slider:before {
+    transform: translateX(20px);
+  }
+
+  /* Form Elements */
+  .section {
     margin-bottom: 20px;
   }
 
-  .section {
-    margin-bottom: 15px;
-  }
-
   .section label {
-    font-weight: bold;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-muted);
     display: block;
-    margin-bottom: 5px;
+    margin-bottom: 8px;
   }
 
-  input {
-    width: 48%;
-    padding: 8px;
-    margin: 5px 1%;
-    border-radius: 6px;
-    border: 1px solid #ccc;
+  .input-group {
+    display: flex;
+    gap: 10px;
+  }
+
+  input[type="number"] {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    background-color: var(--input-bg);
+    color: var(--text-main);
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color var(--transition), background-color var(--transition);
+  }
+
+  input[type="number"]:focus {
+    border-color: var(--primary-btn);
+  }
+
+  input[type="number"]::placeholder {
+    color: var(--text-muted);
+    opacity: 0.6;
+  }
+
+  /* Remove number arrows for cleaner look */
+  input[type=number]::-webkit-inner-spin-button, 
+  input[type=number]::-webkit-outer-spin-button { 
+    -webkit-appearance: none; 
+    margin: 0; 
   }
 
   button {
     width: 100%;
-    padding: 12px;
+    padding: 14px;
+    margin-top: 10px;
     border: none;
-    background: black;
-    color: white;
+    background: var(--primary-btn);
+    color: var(--btn-text);
     border-radius: 8px;
-    font-size: 16px;
+    font-size: 1rem;
+    font-weight: 600;
     cursor: pointer;
+    transition: background-color var(--transition), transform 0.1s;
   }
 
   button:hover {
-    background: #333;
+    background: var(--primary-btn-hover);
+  }
+
+  button:active {
+    transform: scale(0.98);
   }
 
   .result {
-    margin-top: 15px;
-    font-size: 18px;
+    margin-top: 25px;
+    padding: 15px;
+    border-radius: 8px;
+    background-color: var(--bg-color);
+    border: 1px solid var(--border-color);
+    font-size: 1.25rem;
     text-align: center;
-    font-weight: bold;
+    font-weight: 700;
+    color: var(--text-main);
+    transition: background-color var(--transition), border-color var(--transition);
   }
 </style>
 </head>
@@ -71,53 +206,79 @@
 <body>
 
 <div class="container">
-  <h2>UMTC Grade Calculator</h2>
+  <div class="header">
+    <h2>UMTC Grades</h2>
+    <label class="theme-switch" for="checkbox" title="Toggle Dark Mode">
+      <input type="checkbox" id="checkbox" onchange="toggleTheme()">
+      <div class="slider"></div>
+    </label>
+  </div>
 
-  <!-- Exams -->
   <div class="section">
     <label>1st Exam (10%)</label>
-    <input type="number" id="e1_score" placeholder="Score">
-    <input type="number" id="e1_total" placeholder="Total">
+    <div class="input-group">
+      <input type="number" id="e1_score" placeholder="Score">
+      <input type="number" id="e1_total" placeholder="Total">
+    </div>
   </div>
 
   <div class="section">
     <label>2nd Exam (10%)</label>
-    <input type="number" id="e2_score" placeholder="Score">
-    <input type="number" id="e2_total" placeholder="Total">
+    <div class="input-group">
+      <input type="number" id="e2_score" placeholder="Score">
+      <input type="number" id="e2_total" placeholder="Total">
+    </div>
   </div>
 
   <div class="section">
     <label>3rd Exam (10%)</label>
-    <input type="number" id="e3_score" placeholder="Score">
-    <input type="number" id="e3_total" placeholder="Total">
+    <div class="input-group">
+      <input type="number" id="e3_score" placeholder="Score">
+      <input type="number" id="e3_total" placeholder="Total">
+    </div>
   </div>
 
   <div class="section">
     <label>Final Exam (40%)</label>
-    <input type="number" id="final_score" placeholder="Score">
-    <input type="number" id="final_total" placeholder="Total">
+    <div class="input-group">
+      <input type="number" id="final_score" placeholder="Score">
+      <input type="number" id="final_total" placeholder="Total">
+    </div>
   </div>
 
-  <!-- Quiz -->
   <div class="section">
     <label>Quizzes (10%)</label>
-    <input type="number" id="quiz_score" placeholder="Score">
-    <input type="number" id="quiz_total" placeholder="Total">
+    <div class="input-group">
+      <input type="number" id="quiz_score" placeholder="Score">
+      <input type="number" id="quiz_total" placeholder="Total">
+    </div>
   </div>
 
-  <!-- Research -->
   <div class="section">
     <label>Research (20%)</label>
-    <input type="number" id="res_score" placeholder="Score">
-    <input type="number" id="res_total" placeholder="Total">
+    <div class="input-group">
+      <input type="number" id="res_score" placeholder="Score">
+      <input type="number" id="res_total" placeholder="Total">
+    </div>
   </div>
 
   <button onclick="calculate()">Calculate Final Grade</button>
 
-  <div class="result" id="result"></div>
+  <div class="result" id="result">Final Grade: --</div>
 </div>
 
 <script>
+// --- Theme Toggle Logic ---
+function toggleTheme() {
+  const isChecked = document.getElementById('checkbox').checked;
+  if (isChecked) {
+    document.documentElement.setAttribute('data-theme', 'dark');
+  } else {
+    document.documentElement.removeAttribute('data-theme');
+  }
+}
+
+// --- Calculation Logic ---
 function compute(score, total, percentage) {
   if (!score || !total || total === 0) return 0;
   return ((score / total) * 85 + 15) * percentage;
@@ -125,15 +286,19 @@ function compute(score, total, percentage) {
 
 function calculate() {
   let totalGrade =
-    compute(e1_score.value, e1_total.value, 0.10) +
-    compute(e2_score.value, e2_total.value, 0.10) +
-    compute(e3_score.value, e3_total.value, 0.10) +
-    compute(final_score.value, final_total.value, 0.40) +
-    compute(quiz_score.value, quiz_total.value, 0.10) +
-    compute(res_score.value, res_total.value, 0.20);
+    compute(parseFloat(e1_score.value), parseFloat(e1_total.value), 0.10) +
+    compute(parseFloat(e2_score.value), parseFloat(e2_total.value), 0.10) +
+    compute(parseFloat(e3_score.value), parseFloat(e3_total.value), 0.10) +
+    compute(parseFloat(final_score.value), parseFloat(final_total.value), 0.40) +
+    compute(parseFloat(quiz_score.value), parseFloat(quiz_total.value), 0.10) +
+    compute(parseFloat(res_score.value), parseFloat(res_total.value), 0.20);
 
-  document.getElementById("result").innerText =
-    "Final Grade: " + totalGrade.toFixed(2);
+  // Added a check to display "--" if nothing is entered, rather than 0.00
+  if (totalGrade === 0) {
+      document.getElementById("result").innerText = "Final Grade: --";
+  } else {
+      document.getElementById("result").innerText = "Final Grade: " + totalGrade.toFixed(2);
+  }
 }
 </script>
 
